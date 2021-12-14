@@ -37,7 +37,7 @@ used in the code. The finals codes are in this repository.
 The folder `data` contains all processed data in two different sky
 conditions: **i)clear sky days**; **ii)partial clound days**. The raw
 data, for applications of the full-script must be required to [Costa,
-L.M.](luism.costa00@gmail.com)
+L.M.](https://github.com/lm-costa)
 
 The data avaialable in the folders was retrieved by the codes `clear.R`
 and `partial.R`, founded in the `R` folder. the other codes availables

@@ -19,7 +19,7 @@ The data consist in a time-series from 24th may from 14th july of 2018, and the 
 
 After the measuarments and fitting F full-spectra by the method described [Cogliati et al., 2019](https://doi.org/10.3390/rs11161840), the dataset was processed in the R programming language, for more informations about the proceding can be found at in the followings repositories: [Draft 1](https://github.com/lm-costa/draft_bepe) and [Draft 2](https://github.com/lm-costa/draft_2_bepe). However this repositories it is a first draft with explanations about the formulas used in the code. The finals codes are in this repository. 
 
-The folder `data` contains all processed data in two different sky conditions: **i)clear sky days**; **ii)partial clound days**. The raw data, for applications of the full-script must be required to [Costa, L.M.](luism.costa00@gmail.com)
+The folder `data` contains all processed data in two different sky conditions: **i)clear sky days**; **ii)partial clound days**. The raw data, for applications of the full-script must be required to [Costa, L.M.](https://github.com/lm-costa)
 
 The data avaialable in the folders was retrieved by the codes `clear.R` and `partial.R`, founded in the `R` folder. the other codes availables in the folder are basically the same, however with some restrictions or a different approach in some formulation, where, the condition of sky (clear or partial) following: 
 
