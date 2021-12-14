@@ -1,7 +1,6 @@
 ---
 title: "Fluorescence - BEPE"
 author: "Costa, L. M; Cogliati, S.; Cesana, I.; Colombo, R.; La Scala Jr., N."
-date: "14/12/2021"
 output: github_document
 ---
 
@@ -39,8 +38,28 @@ ii) Stepwise regression
 
 # **Figures**
 
-All figures can be reproduced using the code `graphs.R`
+All figures can be reproduced using the code `graphs.R`, however, here are the example of the Pearson's correlation between GPP and The F full spectra:
 
+```{r}
+correl_partial <- readr::read_rds("data/partial/correl.rds")
+correl_frc_partial <- readr::read_rds("data/partial/correl_frc.rds")
+
+correl_partial[-c(683,684),] |>
+  ggplot2::ggplot(ggplot2::aes(x=V4,y=correl,ymax=uper,ymin=lower))+
+  ggplot2::geom_ribbon(alpha=.1,linetype="dashed",color="black")+
+  ggplot2::geom_jitter(color="black")+
+  ggplot2::geom_ribbon(ggplot2::aes(ymax=correl_frc_partial$uper[-c(683,684)],
+                                    ymin=correl_frc_partial$lower[-c(683,684)]),
+                       color='red', linetype='dashed',alpha=.1)+
+  ggplot2::geom_point(ggplot2::aes(x=correl_frc_partial$V4[-c(683,684)],
+                                    y=correl_frc_partial$correl_fr[-c(683,684)]),
+                      color='red')+
+  ggplot2::ylim(0,1)+
+  ggplot2::labs(x=expression("Wavelenght ("~ lambda ~")"),
+                y=expression('Correlation (GPP vs F('~lambda~'))' ))+
+  ggplot2::theme(axis.title= ggplot2::element_text(size=16),
+                 axis.text = ggplot2::element_text(size=14,color='black'))
+```
 
 
 # **Final Statment**
