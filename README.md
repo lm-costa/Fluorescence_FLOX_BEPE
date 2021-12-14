@@ -6,7 +6,7 @@ Costa, L. M; Cogliati, S.; Cesana, I.; Colombo, R.; La Scala Jr., N.
 
 This repository is part of a project financed by the [*São Paulo state
 research support foundation (FAPESP)*](https://fapesp.br/en) under the
-process
+fundings:
 [2021/06477-0](https://bv.fapesp.br/en/bolsas/197773/evaluation-of-different-approaches-for-the-retrieval-of-sun-induced-fluorescence/)
 and
 [2019/25812-4](https://bv.fapesp.br/en/bolsas/190947/spatial-and-temporal-variability-of-atmospheric-co2-in-the-metropolitan-region-of-ribeirao-preto-sao/)
@@ -16,34 +16,49 @@ based on the Phd thesis from [Cesana,
 I.](https://www.researchgate.net/profile/Ilaria-Cesana), the thesis is
 not avaialable yet.
 
-More about whow the data was processed can be found in the folowings
-repositories: [Draft 1](https://github.com/lm-costa/draft_bepe) and
-[Draft 2](https://github.com/lm-costa/draft_2_bepe)
-
 # **Data**
 
+## **Fluorescence Full - Spectrum at Top Of Canopy (TOC)**
+
 The data consist in a time-series from 24th may from 14th july of 2018,
-and the measuremenst of the fluorescence was in an alfalfa crop in
-Grosseto Italy. More about the retrieval of the fluoresnce at Top Of
-Canopy can be found in [Cogliati et al.,
-2019](https://doi.org/10.3390/rs11161840)
+and the measurements of the fluorescence was in an alfalfa crop in
+Grosseto Italy. More about the retrieval of the fluorescence at TOC can
+be found in [Cogliati et al., 2019](https://doi.org/10.3390/rs11161840).
+
+After the measuarments and fitting F full-spectra by the method
+described [Cogliati et al., 2019](https://doi.org/10.3390/rs11161840),
+the dataset was processed in the R programming language, for more
+informations about the proceding can be found at in the followings
+repositories: [Draft 1](https://github.com/lm-costa/draft_bepe) and
+[Draft 2](https://github.com/lm-costa/draft_2_bepe). However this
+repositories it is a first draft with explanations about the formulas
+used in the code. The finals codes are in this repository.
 
 The folder `data` contains all processed data in two different sky
-conditions: **i)clear sky days**; **ii)partial clound days**.
+conditions: **i)clear sky days**; **ii)partial clound days**. The raw
+data, for applications of the full-script must be required to [Costa,
+L.M.](luism.costa00@gmail.com)
 
-The data avaialable in the folders were retrieved by the codes `clear.R`
-and `partial.R`, founded in the `R` folder. the other codes avaialables
-in the folder are basicaly the same, however with some restrictions or a
-different aproach in some formulation, where, the condition of sky
-(clear or partial) folowing:
+The data avaialable in the folders was retrieved by the codes `clear.R`
+and `partial.R`, founded in the `R` folder. the other codes availables
+in the folder are basically the same, however with some restrictions or
+a different approach in some formulation, where, the condition of sky
+(clear or partial) following:
 
-1.  SZA: the interval of the Solar Zenital Angle was set in the interval
-    of 20 to 50 degress
+1.  *SZA*: the interval of the Solar Zenital Angle was set in the
+    interval of 20 to 50 degress
 
-2.  day: the analyses was made by just 2 days
+2.  *day*: the analyses was made by just 2 days
 
-3.  L750: For the Re-absorption correction the Ligth incoming at 750 nm
-    was used instead of the cos(SZA)
+3.  *L750*: For the Re-absorption correction the Light incoming at 750
+    nm was used instead of the cos(SZA)
+
+## **GPP data**
+
+The documatation about the GPP can be found in the folder
+`documatation`. For our analyses we just used the GPP\_DT\_U95. This
+means that we use the GPP measuments at day with 95% of urcertanti
+confidence.
 
 # **Model**
 
