@@ -46,12 +46,14 @@ df_frc_partial |>
     names_to = "wavelength",
     values_to = "Fluorescence") |>
   dplyr::filter(day!=155) |>
-  ggplot2::ggplot(ggplot2::aes(x=as.numeric(wavelength), y=Fluorescence, color=lubridate::hour(UTC))) +
+  ggplot2::ggplot(ggplot2::aes(x=as.numeric(wavelength), y=Fluorescence/3.14, color=lubridate::hour(UTC))) +
   ggplot2::geom_point() +
   ggplot2::geom_line()+
   ggplot2::facet_wrap(~day)+
-  ggplot2::labs(x=expression("Wavelength ("~ lambda~")"), color="Hour")+
-  ggplot2::theme(axis.title= ggplot2::element_text(size=16),
+  ggplot2::labs(x=expression("Wavelength ("~ lambda~")"),
+                y=expression('Fluorescence RC ('~ Wm^-2*sr^-1*mu*m^-1~')'),
+                color="Hour")+
+  ggplot2::theme(axis.title= ggplot2::element_text(size=14),
                  axis.text = ggplot2::element_text(size=12,color='black'),
                  legend.text = ggplot2::element_text(size=12))
 
@@ -67,8 +69,10 @@ df_partial |>
   ggplot2::facet_wrap(~day)+
   ggplot2::xlab(label="Wavelength")+
   ggplot2::labs(col='Hour', fontsize=14)+
-  ggplot2::labs(x=expression("Wavelength ("~ lambda~")"), color="Hour")+
-  ggplot2::theme(axis.title= ggplot2::element_text(size=16),
+  ggplot2::labs(x=expression("Wavelength ("~ lambda~")"),
+                y=expression('Fluorescence at TOC ('~ Wm^-2*sr^-1*mu*m^-1~')'),
+                color="Hour")+
+  ggplot2::theme(axis.title= ggplot2::element_text(size=14),
                  axis.text = ggplot2::element_text(size=12,color='black'),
                  legend.text = ggplot2::element_text(size=12))
 
@@ -112,7 +116,7 @@ df_partial |>
   ggplot2::geom_smooth(method = "lm")+
   ggpubr::stat_regline_equation(ggplot2::aes(
     label =  paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~~")),size=5)+
-  ggplot2::labs(x=expression(paste('F'[Int]~' (',Wm^-2*sr^-1*mu*m^-1,')')),
+  ggplot2::labs(x=expression(paste('F'[INT]~' (',Wm^-2*sr^-1*mu*m^-1,')')),
                 y=expression(paste('GPP ('~mu*mol,' ',m^-2,' ',s^-1,')')),
                 col="DOY")+
   ggplot2::theme_bw()+

@@ -20,16 +20,38 @@ F_time <- t(F_Spec)
 F_time <- data.frame(F_time)
 names(F_time) <- spect
 
+df_funtion <- function(data.f,name="") {
+  for(i in 1:(ncol(data.f))){
+    if(i==1){
+      m <- mean(data.f[,i])
+    }else{
+      ma <- mean(data.f[,i])
+      m <- rbind(m,ma)
+    }
+  }
+  m <- data.frame(m)
+  names(m) <- name
+  row.names(m) <- seq(1:nrow(m))
+  return(m)
+}
+
 R_Spec <- data.frame(t(R_Spec))
 names(R_Spec) <- spect
-Rnir <- R_Spec$`775`
+Rnir <-  R_Spec |>
+  dplyr::select(`774.4`:`776.05`) |>
+  t() |>
+  data.frame() |>
+  df_funtion(name = "Rnir")
+
 
 
 tab <- cbind(ind_tab, metri,Rnir, F_time)
 
+
 tab <- tab |>
   dplyr::mutate(
-    day = DOYdayfrac%/%1
+    day = DOYdayfrac%/%1,
+    NIRv=NDVI*Reflectance760
   ) |>
   dplyr::filter(
     day != 144 & day!=151  & day!= 156 & day!=158 & day!=166
@@ -73,8 +95,9 @@ comp_gpp_f <- comp_gpp_f[,-c(6,7,176)]
 
 df <- cbind(comp_f_gpp,comp_gpp_f)
 
+df[768]
 
-spect_tab <- df[,-c(1:85,768:943)]
+spect_tab <- df[,-c(1:85,768:944)]
 spect_tab <- as.data.frame(t(spect_tab))
 
 c_spec <- as.character(df$Group.1)
@@ -165,7 +188,7 @@ correl[,4] <- as.numeric(spect_tab$spect)
 
 
 correl[-c(683:684),] |>
-  ggplot2::ggplot(ggplot2::aes(x=as.numeric(V4), y = correl_fy, ymax= uper, ymin=lower))+
+  ggplot2::ggplot(ggplot2::aes(x=as.numeric(V4), y = correl, ymax= uper, ymin=lower))+
   ggplot2::geom_point()+
   ggplot2::geom_ribbon(alpha=.1)+
   ggplot2::xlab(label="Fluorescence Spectra in nm")+
@@ -177,10 +200,25 @@ df <- df |>
   dplyr::mutate(
     k1=584*sin(circular::rad(SZA)) - 88,
     k2= 3.55424 - 1.15937*cos(circular::rad(SZA)),
-    aPAR= k1*sin(k2*Rnir),
+    aPAR= k1*sin(k2*NIRv),
     Fy= Fint/aPAR,
     LUE=GPP_DT_U95/aPAR
   )
+
+
+df |>
+  ggplot2::ggplot(ggplot2::aes(y=LUE,x=Fy))+
+  ggplot2::geom_jitter(ggplot2::aes(color=as.factor(day)))+
+  ggplot2::geom_smooth(method = "lm")+
+  ggpubr::stat_regline_equation(ggplot2::aes(
+    label =  paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~~")),size=5)+
+  ggplot2::labs(y='LUE', x=expression('F'[y]^Total), col='DOY')+
+  ggplot2::theme_bw()+
+  ggplot2::theme(axis.title= ggplot2::element_text(size=14),
+                 axis.text = ggplot2::element_text(size=12,color='black'),
+                 legend.text = ggplot2::element_text(size=12))
+
+
 
 
 pear_resul <- vector("list", length = ncol(tab2))
@@ -214,7 +252,7 @@ correl_fy[,4] <- as.numeric(spect_tab$spect)
 
 ######
 
-fobs <- tab[,-c(767)]
+fobs <- tab[,-c(767,768)]
 
 a = dplyr::case_when(
   abs(cos(circular::rad(fobs$SZA))) <=cos(circular::rad(22))~ 81.36 - 13.45*cos(circular::rad(fobs$SZA)),
@@ -322,6 +360,13 @@ df_frc <- df_frc |>
     fy = fint/df$aPAR
   )
 
+df_frc |>
+  ggplot2::ggplot(ggplot2::aes(x=GPP_DT_U95/df$aPAR,y=fint/df$aPAR))+
+  ggplot2::geom_point()+
+  ggplot2::geom_smooth(method = "lm")+
+  ggpubr::stat_regline_equation(ggplot2::aes(
+    label =  paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~~")),size=5)
+
 fint_t <- vector("numeric", length = ncol(spectra_Table))
 
 fint_t[2:ncol(spectra_Table)] <- t(fint)
@@ -424,3 +469,15 @@ correl_fy[-c(683,684),] |>
 
 
 
+dt <- data.frame(df_frc$LUE, df_frc$Fint/3.14/df$aPAR, df$day)
+dt |>
+  ggplot2::ggplot(ggplot2::aes(y=df_frc.LUE,x=df_frc.Fint.3.14.df.aPAR))+
+  ggplot2::geom_jitter(ggplot2::aes(color=as.factor(df.day)))+
+  ggplot2::geom_smooth(method = "lm")+
+  ggpubr::stat_regline_equation(ggplot2::aes(
+    label =  paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~~")),size=5)+
+  ggplot2::labs(y='LUE', x=expression('F'[y-RC]^Total), col='DOY')+
+  ggplot2::theme_bw()+
+  ggplot2::theme(axis.title= ggplot2::element_text(size=14),
+                 axis.text = ggplot2::element_text(size=12,color='black'),
+                 legend.text = ggplot2::element_text(size=12))
